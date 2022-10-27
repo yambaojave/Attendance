@@ -17,6 +17,8 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import { addDays } from "date-fns";
 
+import * as xlsx from "xlsx";
+
 const columns = [
   { id: "_emplCode", label: "EmpCode", minWidth: 10},
   { id: "_LName", label: "LastName", minWidth: 150},
@@ -109,6 +111,20 @@ const PerfectAttendance = () => {
     })
   }
 
+  const CreateExcelFile = () => {
+    if(rows == 0) {
+      return alert("No Data Available. Please Load Data First!");
+    }
+    else{
+      let wb = xlsx.utils.book_new(),
+      ws = xlsx.utils.json_to_sheet(rows);
+
+      xlsx.utils.book_append_sheet(wb, ws, "Perfect_Attendance");
+
+      xlsx.writeFile(wb, "Attendance.xlsx");
+    }
+  }
+
   return (
     <Grid item xs={8}>
       <div className="row">
@@ -141,12 +157,13 @@ const PerfectAttendance = () => {
         </div>
         <div className="col-8 mt-3">
           <Button variant="primary" onClick={() => fetchDate()}>LOAD DATA</Button>
+          <Button className="ms-3" variant="success" onClick={() => CreateExcelFile()}>Export Data To Excel</Button>
         </div>
       </div>
 
-      <Paper sx={{ width: "120%", overflow: "hidden" }} className="m-3">
+      <Paper sx={{ width: "125%", overflow: "hidden" }} className="m-3">
         <TableContainer sx={{ maxHeight: 800 }}>
-          <Table stickyHeader aria-label="sticky table">
+          <Table stickyHeader aria-label="sticky table" id="table_data">
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
