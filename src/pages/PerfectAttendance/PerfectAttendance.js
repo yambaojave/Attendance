@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 
 //Date Range Dependencies
 import format from "date-fns/format";
@@ -17,39 +17,42 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import { addDays } from "date-fns";
 
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import * as xlsx from "xlsx";
+import api from "../../api-proxy";
 
 const columns = [
-  { id: "_emplCode", label: "EmpCode", minWidth: 10},
-  { id: "_LName", label: "LastName", minWidth: 150},
-  { id: "_FName", label: "FirstName", minWidth: 150},
-  { id: "_MName", label: "MiddleName", minWidth: 150},
-  { id: "_dHire", label: "Date Hired", minWidth: 10},
-  { id: "_dResign", label: "Date Resigned", minWidth: 150},
-  { id: "_empPlant", label: "Plant", minWidth: 100},
-  { id: "_DeptCode", label: "Department", minWidth: 150},
-  { id: "_SectCode", label: "Section", minWidth: 100},
-  { id: "_ChargeCode", label: "Charge Code", minWidth: 150},
-  { id: "_empPos", label: "Position", minWidth: 100},
-  { id: "_REGHRS", label: "REGHRS", minWidth: 100},
-  { id: "_OTHRS", label: "OTHRS", minWidth: 100},
-  { id: "_ABSENT", label: "ABSENT", minWidth: 100},
-  { id: "_LATE", label: "LATE", minWidth: 100},
-  { id: "_UNDERTIME", label: "UNDERTIME", minWidth: 100},
-  { id: "_SLSW", label: "SLSW", minWidth: 100},
-  { id: "_ML", label: "ML", minWidth: 100},
-  { id: "_VLVW", label: "VLVW", minWidth: 100},
-  { id: "_PLPW", label: "PLPW", minWidth: 100},
-  { id: "_BLBW", label: "BLBW", minWidth: 100},
-  { id: "_SPLSPW", label: "SPLSPW", minWidth: 100},
-  { id: "_SP", label: "SP", minWidth: 100},
-  { id: "_SD", label: "SD", minWidth: 100},
-  { id: "_VD", label: "VD", minWidth: 100},
-  { id: "_NP", label: "NP", minWidth: 100},
-  { id: "_NW", label: "NW", minWidth: 100},
-  { id: "_BDL", label: "BDL", minWidth: 100},
-  { id: "_EL", label: "EL", minWidth: 100},
-
+  { id: "_emplCode", label: "EmpCode", minWidth: 10 },
+  { id: "_LName", label: "LastName", minWidth: 150 },
+  { id: "_FName", label: "FirstName", minWidth: 150 },
+  { id: "_MName", label: "MiddleName", minWidth: 150 },
+  { id: "_dHire", label: "Date Hired", minWidth: 120 },
+  { id: "_dResign", label: "Date Resigned", minWidth: 150 },
+  { id: "_empPlant", label: "Plant", minWidth: 100 },
+  { id: "_DeptCode", label: "Department", minWidth: 150 },
+  { id: "_SectCode", label: "Section", minWidth: 100 },
+  { id: "_ChargeCode", label: "Charge Code", minWidth: 150 },
+  { id: "_empPos", label: "Position", minWidth: 100 },
+  { id: "_REGHRS", label: "REGHRS", minWidth: 100 },
+  { id: "_OTHRS", label: "OTHRS", minWidth: 100 },
+  { id: "_ABSENT", label: "ABSENT", minWidth: 100 },
+  { id: "_LATE", label: "LATE", minWidth: 100 },
+  { id: "_UNDERTIME", label: "UNDERTIME", minWidth: 100 },
+  { id: "_SLSW", label: "SLSW", minWidth: 100 },
+  { id: "_ML", label: "ML", minWidth: 100 },
+  { id: "_VLVW", label: "VLVW", minWidth: 100 },
+  { id: "_PLPW", label: "PLPW", minWidth: 100 },
+  { id: "_BLBW", label: "BLBW", minWidth: 100 },
+  { id: "_SPLSPW", label: "SPLSPW", minWidth: 100 },
+  { id: "_SP", label: "SP", minWidth: 100 },
+  { id: "_SD", label: "SD", minWidth: 100 },
+  { id: "_VD", label: "VD", minWidth: 100 },
+  { id: "_NP", label: "NP", minWidth: 100 },
+  { id: "_NW", label: "NW", minWidth: 100 },
+  { id: "_BDL", label: "BDL", minWidth: 100 },
+  { id: "_EL", label: "EL", minWidth: 100 },
 ];
 
 const PerfectAttendance = () => {
@@ -84,7 +87,6 @@ const PerfectAttendance = () => {
     }
   };
 
-
   //Pagination Side
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -95,35 +97,45 @@ const PerfectAttendance = () => {
     setPage(0);
   };
 
-
-
-  //Fetching of Data 
-  const [rows, setRows] = useState([])
+  //Fetching of Data
+  const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
   const fetchDate = async () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
-    let eDate = format(range[0].endDate, "yyyy-MM-dd")
+    let eDate = format(range[0].endDate, "yyyy-MM-dd");
     console.log(sDate, eDate);
-
-    fetch(`http://10.210.11.145/AttendanceAPI/api/Attendance/GetAttendance?sDate=${sDate}&eDate=${eDate}`, { method: 'GET' })
-    .then(res => res.json())
-    .then(data => {
-      setRows(data);
-    })
-  }
+    setLoading(true)
+    try {
+      await fetch(
+        api.url + `/api/Attendance/GetAttendance?sDate=${sDate}&eDate=${eDate}`,
+        { method: "GET" }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.length === 0) {
+            setLoading(false);
+            return alert(`No Data Loaded!`);
+          }
+          setRows(data);
+          setLoading(false);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const CreateExcelFile = () => {
-    if(rows == 0) {
+    if (rows.length === 0) {
       return alert("No Data Available. Please Load Data First!");
-    }
-    else{
+    } else {
       let wb = xlsx.utils.book_new(),
-      ws = xlsx.utils.json_to_sheet(rows);
+        ws = xlsx.utils.json_to_sheet(rows);
 
       xlsx.utils.book_append_sheet(wb, ws, "Perfect_Attendance");
 
       xlsx.writeFile(wb, "Attendance.xlsx");
     }
-  }
+  };
 
   return (
     <Grid item xs={8}>
@@ -156,13 +168,26 @@ const PerfectAttendance = () => {
           </div>
         </div>
         <div className="col-8 mt-3">
-          <Button variant="primary" onClick={() => fetchDate()}>LOAD DATA</Button>
-          <Button className="ms-3" variant="success" onClick={() => CreateExcelFile()}>Export Data To Excel</Button>
+          <Button variant="primary" onClick={() => fetchDate()}>
+            {loading ? <Box sx={{ display: "flex" }}>
+              <CircularProgress color="secondary"/>
+            </Box> : "LOAD DATA"}
+            
+            
+            
+          </Button>
+          <Button
+            className="ms-3"
+            variant="success"
+            onClick={() => CreateExcelFile()}
+          >
+            Export Data To Excel
+          </Button>
         </div>
       </div>
 
       <Paper sx={{ width: "125%", overflow: "hidden" }} className="m-3">
-        <TableContainer sx={{ maxHeight: 800 }}>
+        <TableContainer sx={{ maxHeight: 1000 }}>
           <Table stickyHeader aria-label="sticky table" id="table_data">
             <TableHead>
               <TableRow>
@@ -219,7 +244,6 @@ const PerfectAttendance = () => {
 };
 
 export default PerfectAttendance;
-
 
 //Note: Change Format of Date for dHired and dResigned
 // 1. Convert Date from SQL to "yyyy-MM-dd"
