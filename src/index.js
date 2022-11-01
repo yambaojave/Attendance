@@ -15,15 +15,22 @@ import NoLogs from './pages/NoLogs/NoLogs';
 import PerfectAttendance from './pages/PerfectAttendance/PerfectAttendance';
 import Resigned from './pages/Resigned/Resigned';
 import WFH from './pages/WFH/WFH';
+import YearReport from './pages/YearReport/YearReport';
+import SignIn from './pages/Login/SignIn';
 import PageNotFound from './pages/PageNotFound';
 
+
 const router = createBrowserRouter([
+  {
+    path: '/SignIn',
+    element: <SignIn />
+  },
   {
     path: "/",
     element: <App />,
     children: [
       {
-        path: "perfectAttendace",
+        path: "perfectAttendance",
         element: <PerfectAttendance />,
       },
       {
@@ -55,12 +62,15 @@ const router = createBrowserRouter([
         element: <MonthEndOT />,
       },
       {
-        path: "*",
-        element: <PageNotFound />,
+        path: "yearReport",
+        element: <YearReport />,
       },
     ]
   },
-  
+  {
+    path: "*",
+    element: <PageNotFound />,
+  },
 
 ]);
 

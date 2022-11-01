@@ -6,13 +6,14 @@ import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 export const mainNavbarItems  = [
     {
         id: 0,
         icon: <CalendarTodayIcon />,
         label: 'Perfect Attendance',
-        route: 'perfectAttendace',
+        route: 'perfectAttendance',
     },
     {
         id: 1,
@@ -55,5 +56,11 @@ export const mainNavbarItems  = [
         icon: <CalendarMonthIcon />,
         label: 'Month End OT',
         route: 'monthEndOt',
+    },
+    {
+        id: 8,
+        icon: <DateRangeIcon />,
+        label: 'Year Report',
+        route: 'yearReport',
     },
 ]

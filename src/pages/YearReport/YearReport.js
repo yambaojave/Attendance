@@ -24,21 +24,46 @@ import * as xlsx from "xlsx";
 import api from "../../api-proxy";
 
 const columns = [
-  { id: "_change_shift_id", label: "Change Shift ID", minWidth: 150 },
-  { id: "_empd_ID", label: "Empd ID", minWidth: 150 },
-  { id: "_empname", label: "Employee Name", minWidth: 150 },
-  { id: "_deptcode", label: "Department", minWidth: 150 },
-  { id: "_sectcode", label: "Section", minWidth: 150 },
-  { id: "_change_shift_date", label: "Change Shift Date", minWidth: 150 },
-  { id: "_current_shift", label: "Current Shift", minWidth: 150 },
-  { id: "_status", label: "Status", minWidth: 150 },
-  { id: "_system_remarks", label: "System Remarks", minWidth: 150 },
+  { id: "_emplCode", label: "EMPD_ID", minWidth: 150 },
+  { id: "_EName", label: "Employee Name", minWidth: 150 },
+  { id: "_empPos", label: "Position", minWidth: 150 },
+  { id: "_SectCode", label: "Section", minWidth: 150 },
+  { id: "_dHire", label: "Date Hired", minWidth: 150 },
+  { id: "_EmpCode", label: "Employee Code", minWidth: 150 },
+  { id: "_VL", label: "VL", minWidth: 10 },
+  { id: "_SL", label: "SL", minWidth: 10 },
+  { id: "_BL", label: "BL", minWidth: 10 },
+  { id: "_PL", label: "PL", minWidth: 10 },
+  { id: "_NP", label: "NP", minWidth: 10 },
+  { id: "_ML", label: "ML", minWidth: 10 },
+  { id: "_SPL", label: "SPL", minWidth: 10 },
+  { id: "_SML", label: "SML", minWidth: 10 },
+  { id: "_BDL", label: "BDL", minWidth: 10 },
+  { id: "_EL", label: "EL", minWidth: 10 },
+  { id: "_TOTAL1", label: "TOTAL1", minWidth: 10 },
+  { id: "_VW", label: "VW", minWidth: 10 },
+  { id: "_SW", label: "SW", minWidth: 10 },
+  { id: "_BW", label: "BW", minWidth: 10 },
+  { id: "_NW", label: "NW", minWidth: 10 },
+  { id: "_SPLW", label: "SPLW", minWidth: 10 },
+  { id: "_TOTAL2", label: "TOTAL2", minWidth: 10 },
+  { id: "_VD", label: "VD", minWidth: 10 },
+  { id: "_SD", label: "SD", minWidth: 10 },
+  { id: "_BD", label: "BD", minWidth: 10 },
+  { id: "_PD", label: "PD", minWidth: 10 },
+  { id: "_SPWD", label: "SPWD", minWidth: 10 },
+  { id: "_SP", label: "SP", minWidth: 10 },
+  { id: "_ABSENCES", label: "ABSENCES", minWidth: 10 },
+  { id: "_TOTAL3", label: "TOTAL3", minWidth: 10 },
+
 ];
 
 
-const Lf_Of_CS = () => {
+
+const YearReport = () => {
+
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
   //DateRange Side
   const [range, setRange] = useState([
@@ -87,7 +112,7 @@ const Lf_Of_CS = () => {
     setLoading(true)
     try {
       await fetch(
-        api.url + `/api/Attendance/GetLateCSFile?sDate=${sDate}&eDate=${eDate}`,
+        api.url + `/api/Attendance/GetYearReport?sDate=${sDate}&eDate=${eDate}`,
         { method: "GET" }
       )
         .then((res) => res.json())
@@ -111,9 +136,9 @@ const Lf_Of_CS = () => {
       let wb = xlsx.utils.book_new(),
         ws = xlsx.utils.json_to_sheet(rows);
 
-      xlsx.utils.book_append_sheet(wb, ws, "LAteCSFile");
+      xlsx.utils.book_append_sheet(wb, ws, "YearReport");
 
-      xlsx.writeFile(wb, "LateCS.xlsx");
+      xlsx.writeFile(wb, "YearReport.xlsx");
     }
   };
 
@@ -210,7 +235,7 @@ const Lf_Of_CS = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
+          rowsPerPageOptions={[100, 250, 500, 1000]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -223,4 +248,4 @@ const Lf_Of_CS = () => {
   );
 };
 
-export default Lf_Of_CS;
+export default YearReport;

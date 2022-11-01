@@ -34,7 +34,7 @@ const columns = [
   { id: "_DeptCode", label: "Department", minWidth: 150 },
   { id: "_SectCode", label: "Section", minWidth: 100 },
   { id: "_ChargeCode", label: "Charge Code", minWidth: 150 },
-  { id: "_empPos", label: "Position", minWidth: 100 },
+  { id: "_empPos", label: "Position", minWidth: 150 },
   { id: "_REGHRS", label: "REGHRS", minWidth: 100 },
   { id: "_OTHRS", label: "OTHRS", minWidth: 100 },
   { id: "_ABSENT", label: "ABSENT", minWidth: 100 },
