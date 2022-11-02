@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,11 +8,16 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import  UserContext   from '../../utils/UserContext';
+import { useNavigate } from "react-router-dom";
+
 
 
 const theme = createTheme();
 
 const  SignIn = () => {
+  const history = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   
   const handleSubmit = (event) => {
@@ -22,7 +27,16 @@ const  SignIn = () => {
     let password = data.get("password");
 
     if (username === "admin" && password === "password") {
-      return alert("You have successfully Signed In!");
+      if(user.token == false){
+        setUser({token: true});
+        history("/PerfectAttendance");
+        return alert("You have successfully Signed In!");
+      }
+
+      else {
+        return alert("Already Logged In!");
+      }
+      
 
     } else {
       return alert("Wrong username or password");

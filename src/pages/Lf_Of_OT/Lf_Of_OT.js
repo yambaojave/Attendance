@@ -165,6 +165,7 @@ const Lf_Of_OT = () => {
             Export Data To Excel
           </Button>
         </div>
+        <div class="ms-3">Note: First Day of the Month and First Day of the Next month.</div>
       </div>
 
       <Paper sx={{ width: "125%", overflow: "hidden" }} className="m-3">

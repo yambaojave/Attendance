@@ -7,6 +7,7 @@ import DataArrayIcon from '@mui/icons-material/DataArray';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export const mainNavbarItems  = [
     {
@@ -62,5 +63,11 @@ export const mainNavbarItems  = [
         icon: <DateRangeIcon />,
         label: 'Year Report',
         route: 'yearReport',
+    },
+    {
+        id: 9,
+        icon: <ExitToAppIcon />,
+        label: 'SignOut',
+        route: 'signOut',
     },
 ]
