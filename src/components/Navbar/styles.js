@@ -1,9 +1,9 @@
 export const navbarStyles = {
     drawer: {
-        width: 320,
+        width: 280,
         flexShrink: 0,
         '& .MuiDrawer-paper' : {
-            width: 320,
+            width: 280,
             boxSizing: 'border-box',
             backgroundColor: '#101F33',
             color: 'rgba(255, 255, 255, 0.7)',

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import * as xlsx from "xlsx";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api} from "../imports";
+import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api, Swal} from "../imports";
 
 const columns = [
   { id: "_DFrom", label: "Date From", minWidth: 150 },
@@ -17,7 +17,7 @@ const columns = [
   { id: "_dresign", label: "Date Resign", minWidth: 150 },
   { id: "_chargecode", label: "Charge Code", minWidth: 150 },
   { id: "_MPHrs", label: "MP Hours", minWidth: 150 },
-  { id: "_OTHrs", label: "OT Hou", minWidth: 150 },
+  { id: "_OTHrs", label: "OT Hours", minWidth: 150 },
 ];
 
 
@@ -68,7 +68,7 @@ const MonthEndOT = () => {
   const fetchDate = async () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
     let eDate = format(range[0].endDate, "yyyy-MM-dd");
-    console.log(sDate, eDate);
+    //console.log(sDate, eDate);
     setLoading(true)
     try {
       await fetch(
@@ -79,7 +79,11 @@ const MonthEndOT = () => {
         .then((data) => {
           if (data.length === 0) {
             setLoading(false);
-            return alert(`No Data Loaded!`);
+            return Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            });
           }
           setRows(data);
           setLoading(false);
@@ -152,7 +156,7 @@ const MonthEndOT = () => {
       </div>
 
       <Paper sx={{ width: "125%", overflow: "hidden" }} className="m-3">
-        <TableContainer sx={{ maxHeight: 1000 }}>
+        <TableContainer sx={{ maxHeight: '80vh' }}>
           <Table stickyHeader aria-label="sticky table" id="table_data">
             <TableHead>
               <TableRow>

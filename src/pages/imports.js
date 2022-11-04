@@ -14,4 +14,5 @@ export { addDays } from "date-fns";
 export {default as CircularProgress} from '@mui/material/CircularProgress';
 export {default as Box} from '@mui/material/Box';
 export {default as api} from "../api-proxy";
+export { default as Swal } from 'sweetalert2';
 

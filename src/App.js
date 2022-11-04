@@ -18,13 +18,13 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import SignOut from "./pages/SignOut";
 
 function App() {
+  const base_url = process.env.PUBLIC_URL;
+  
   const [user, setUser] = useState({ token: false });
-
-  //console.log(user.token.toString());
 
   return (
     <UserProvider value={{ user, setUser }}>
-      <Router>
+      <Router basename={`${base_url}`}>
         <Grid container>
           {
             (user.token) ?
@@ -34,20 +34,22 @@ function App() {
           }
           
           <Routes>
-            <Route element={<PrivateRoutes />} path="/">
-              <Route element={<PerfectAttendance />} path="/perfectAttendance" />
-              <Route element={<Hired />} path="/hired" />
-              <Route element={<Resigned />} path="/resigned" />
-              <Route element={<WFH />} path="/wfh" />
-              <Route element={<Lf_Of_OT />} path="/lf_of_ot" />
-              <Route element={<Lf_Of_CS />} path="/lf_of_cs" />
-              <Route element={<NoLogs />} path="/noLogs" />
-              <Route element={<MonthEndOT />} path="/monthEndOt" />
-              <Route element={<YearReport />} path="/yearReport" />
-              <Route element={<SignOut />} path="/signout" />
-              <Route element={<PageNotFound />} path="/*" />
+            <Route element={<PageNotFound />} exact path='/*' />
+            <Route element={<PrivateRoutes />} exact path='/'>
+              <Route element={<PerfectAttendance />} exact path='/perfectAttendance' />
+              <Route element={<Hired />} exact path='/hired' />
+              <Route element={<Resigned />} exact path='/resigned' />
+              <Route element={<WFH />} exact path='/wfh' />
+              <Route element={<Lf_Of_OT />} exact path='/lf_of_ot' />
+              <Route element={<Lf_Of_CS />} exact path='/lf_of_cs' />
+              <Route element={<NoLogs />} exact path='/noLogs' />
+              <Route element={<MonthEndOT />} exact path='/monthEndOt'/>
+              <Route element={<YearReport />} exact path='/yearReport' />
+              <Route element={<SignOut />} exact path='/signout' />
+              <Route element={<PageNotFound />} exact path='/*' />
             </Route>
-            <Route element={<SignIn />} path="/SignIn" />
+            <Route element={<SignIn />} exact path='/SignIn' />
+            
           </Routes>
         </Grid>
       </Router>

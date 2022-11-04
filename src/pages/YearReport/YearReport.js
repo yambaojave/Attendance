@@ -1,27 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Button from "react-bootstrap/Button";
-
-//Date Range Dependencies
-import format from "date-fns/format";
+import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api, Swal} from "../imports";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRange } from "react-date-range";
-import { addDays } from "date-fns";
-
-
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
 import * as xlsx from "xlsx";
-import api from "../../api-proxy";
 
 const columns = [
   { id: "_emplCode", label: "EMPD_ID", minWidth: 150 },
@@ -108,7 +89,7 @@ const YearReport = () => {
   const fetchDate = async () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
     let eDate = format(range[0].endDate, "yyyy-MM-dd");
-    console.log(sDate, eDate);
+    //console.log(sDate, eDate);
     setLoading(true)
     try {
       await fetch(
@@ -119,7 +100,11 @@ const YearReport = () => {
         .then((data) => {
           if (data.length === 0) {
             setLoading(false);
-            return alert(`No Data Loaded!`);
+            return Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            });
           }
           setRows(data);
           setLoading(false);
@@ -192,7 +177,7 @@ const YearReport = () => {
       </div>
 
       <Paper sx={{ width: "125%", overflow: "hidden" }} className="m-3">
-        <TableContainer sx={{ maxHeight: 1000 }}>
+        <TableContainer sx={{ maxHeight: '85vh' }}>
           <Table stickyHeader aria-label="sticky table" id="table_data">
             <TableHead>
               <TableRow>

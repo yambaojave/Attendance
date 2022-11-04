@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import * as xlsx from "xlsx";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api} from "../imports";
+import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api, Swal} from "../imports";
 
 const columns = [
   { id: "_compCode", label: "Company Code", minWidth: 150 },
@@ -73,7 +73,7 @@ const NoLogs = () => {
   const fetchDate = async () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
     let eDate = format(range[0].endDate, "yyyy-MM-dd");
-    console.log(sDate, eDate);
+    //console.log(sDate, eDate);
     setLoading(true)
     try {
       await fetch(
@@ -84,7 +84,11 @@ const NoLogs = () => {
         .then((data) => {
           if (data.length === 0) {
             setLoading(false);
-            return alert(`No Data Loaded!`);
+            return Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            });
           }
           setRows(data);
           setLoading(false);

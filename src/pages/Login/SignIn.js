@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, { useContext} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import  UserContext   from '../../utils/UserContext';
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 
@@ -26,20 +27,52 @@ const  SignIn = () => {
     let username = data.get("username");
     let password = data.get("password");
 
-    if (username === "admin" && password === "password") {
-      if(user.token == false){
+    const account = [ 
+      {
+        username: 'IT',
+        password: 'jsphIT',
+        role: 'IT'
+      },
+    ];
+
+    if (username === '' && password === ''){
+      return Swal.fire({
+        icon: 'error',
+        title: 'Please enter your username and password!',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }
+    if (username === account[0].username && password === account[0].password) {
+      if(user.token === false){
         setUser({token: true});
         history("/PerfectAttendance");
-        return alert("You have successfully Signed In!");
+        return Swal.fire({
+          icon: 'success',
+          title: 'Welcome!!',
+          showConfirmButton: false,
+          timer: 1000
+        });
       }
-
       else {
-        return alert("Already Logged In!");
+        return Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+          showConfirmButton: false,
+          timer: 1000
+        });
       }
       
 
     } else {
-      return alert("Wrong username or password");
+      return Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Wrong username or password',
+        showConfirmButton: false,
+        timer: 1000
+      });
     }
   };
 

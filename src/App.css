@@ -1,6 +1,9 @@
 #root {
   font-family: 'Mulish', sans-serif;
-  font-size: 25px;
+}
+
+* {
+  font-size : 15px;
 }
 
 input.inputBox {
@@ -19,7 +22,7 @@ input.inputBox {
 .calendarElement {
   position: absolute;
   left: 50%;
-  transform: translateX(-45%);
+  transform: translateX(-36%);
   top: 40px;
   border: 1px solid #ccc;
   z-index: 999;

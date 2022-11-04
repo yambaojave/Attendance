@@ -1,6 +1,7 @@
 {
   "name": "attendance-app",
   "version": "0.1.0",
+  "homepage": "/AttendanceWebPage",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -19,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
+    "sweetalert2": "^11.6.5",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
