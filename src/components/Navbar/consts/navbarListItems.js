@@ -66,6 +66,12 @@ export const mainNavbarItems  = [
     },
     {
         id: 9,
+        icon: <DateRangeIcon />,
+        label: 'Monthly Extraction',
+        route: 'monthlyExtraction',
+    },
+    {
+        id: 10,
         icon: <ExitToAppIcon />,
         label: 'SignOut',
         route: 'signOut',

@@ -70,7 +70,13 @@ const Lf_Of_OT = () => {
     try {
       await fetch(
         api.url + `/api/Attendance/GetLateOTFile?sDate=${sDate}&eDate=${eDate}`,
-        { method: "GET" }
+        { 
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${sessionStorage.getItem("token")}`
+          }
+        }
       )
         .then((res) => res.json())
         .then((data) => {

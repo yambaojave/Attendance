@@ -85,12 +85,19 @@ const PerfectAttendance = () => {
   const fetchDate = async () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
     let eDate = format(range[0].endDate, "yyyy-MM-dd");
+    
     //console.log(sDate, eDate);
     setLoading(true)
     try {
       await fetch(
         api.url + `/api/Attendance/GetAttendance?sDate=${sDate}&eDate=${eDate}`,
-        { method: "GET" }
+        { 
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${sessionStorage.getItem("token")}`
+          }
+        }
       )
         .then((res) => res.json())
         .then((data) => {

@@ -4,31 +4,50 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api, Swal} from "../imports";
 
+
 const columns = [
-  { id: "_compCode", label: "Company Code", minWidth: 150 },
-  { id: "_deptCode", label: "Department", minWidth: 150 },
-  { id: "_sectCode", label: "Section", minWidth: 150 },
-  { id: "_emplCode", label: "Employee ID", minWidth: 150 },
-  { id: "_EmpName", label: "Name", minWidth: 150 },
-  { id: "_DTR_date", label: "DTR Date", minWidth: 150 },
-  { id: "_EmpShift", label: "Shift", minWidth: 150 },
-  { id: "_time_In1", label: "Time In1", minWidth: 150 },
-  { id: "_timeOut1", label: "Time Out1", minWidth: 150 },
-  { id: "_time_In2", label: "Time In2", minWidth: 150 },
-  { id: "_timeOut2", label: "Time Out2", minWidth: 150 },
-  { id: "_time_In3", label: "Time In3", minWidth: 150 },
-  { id: "_timeOut4", label: "Time Out3", minWidth: 150 },
-  { id: "_TimeLate", label: "Late", minWidth: 150 },
-  { id: "_TimeUndr", label: "UnderTime", minWidth: 150 },
-  { id: "_TotHours", label: "Total Hours", minWidth: 150 },
-  { id: "_RegHours", label: "Regular Hours", minWidth: 150 },
-  { id: "_Ot_hours", label: "OT Hours", minWidth: 150 },
+  { id: "compcode", label: "compcode", minWidth: 150 },
+  { id: "empd_id", label: "empd_id", minWidth: 150 },
+  { id: "name", label: "name", minWidth: 150 },
+  { id: "username", label: "username", minWidth: 150 },
+  { id: "fname", label: "fname", minWidth: 150 },
+  { id: "lname", label: "lname", minWidth: 150 },
+  { id: "mname", label: "mname", minWidth: 150 },
+  { id: "estreet", label: "estreet", minWidth: 150 },
+  { id: "empCode", label: "empCode", minWidth: 150 },
+  { id: "bPlace", label: "bPlace", minWidth: 150 },
+  { id: "contactP", label: "contactP", minWidth: 150 },
+  { id: "conAddress", label: "conAddress", minWidth: 150 },
+  { id: "contactNum", label: "contactNum", minWidth: 150 },
+  { id: "dHire", label: "dHire", minWidth: 150 },
+  { id: "dResign", label: "dResign", minWidth: 150 },
+  { id: "awolReason", label: "awolReason", minWidth: 150 },
+  { id: "deptcode", label: "deptcode", minWidth: 150 },
+  { id: "sectcode", label: "sectCode", minWidth: 150 },
+  { id: "empPos", label: "empPos", minWidth: 150 },
+  { id: "funcDesc", label: "funcDesc", minWidth: 150 },
+  { id: "chargeCode", label: "chargeCode", minWidth: 150 },
+  { id: "orgStructure", label: "orgStructure", minWidth: 150 },
+  { id: "jobCatalogNum", label: "jobCatalogNum", minWidth: 150 },
+  { id: "jobCatCharging", label: "jobCatCharging", minWidth: 150 },
+  { id: "standardWorkDays", label: "standardWorkDays", minWidth: 150 },
+  { id: "npnw", label: "npnw", minWidth: 150 },
+  { id: "absences", label: "absences", minWidth: 150 },
+  { id: "regularDays", label: "regularDays", minWidth: 150 },
+  { id: "regularHours", label: "regularHours", minWidth: 150 },
+  { id: "regularOT", label: "regularOT", minWidth: 150 },
+  { id: "restDays", label: "restDays", minWidth: 150 },
+  { id: "restdayOT", label: "restdayOT", minWidth: 150 },
+  { id: "holiDays", label: "holiDays", minWidth: 150 },
+  { id: "holidayOT", label: "holidayOT", minWidth: 150 },
+  { id: "leavePay", label: "leavePay", minWidth: 150 },
+  { id: "leaveNoPay", label: "leaveNoPay", minWidth: 150 },
 ];
 
 
-const NoLogs = () => {
+const MonthlyExtraction = () => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
   //DateRange Side
   const [range, setRange] = useState([
@@ -38,6 +57,10 @@ const NoLogs = () => {
       key: "selection",
     },
   ]);
+
+
+
+
   const [open, setOpen] = useState(false);
   const refOne = useRef(null);
 
@@ -74,16 +97,20 @@ const NoLogs = () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
     let eDate = format(range[0].endDate, "yyyy-MM-dd");
     //console.log(sDate, eDate);
+    //console.log(db); 
+
+
     setLoading(true)
+
     try {
       await fetch(
-        api.url + `/api/Attendance/GetNoLogs?sDate=${sDate}&eDate=${eDate}`,
+        api.url + `/api/Attendance/GetExtractionMonthly?sDate=${sDate}&eDate=${eDate}`,
         { 
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `${sessionStorage.getItem("token")}`
-          }
+          },
         }
       )
         .then((res) => res.json())
@@ -111,9 +138,9 @@ const NoLogs = () => {
       let wb = xlsx.utils.book_new(),
         ws = xlsx.utils.json_to_sheet(rows);
 
-      xlsx.utils.book_append_sheet(wb, ws, "NoLogs");
+      xlsx.utils.book_append_sheet(wb, ws, "Monthly Extraction");
 
-      xlsx.writeFile(wb, "NoLogs.xlsx");
+      xlsx.writeFile(wb, "MonthlyExtraction.xlsx");
     }
   };
 
@@ -148,7 +175,8 @@ const NoLogs = () => {
           </div>
         </div>
         <div className="col-8 mt-3">
-          <Button variant="primary" onClick={() => fetchDate()}>
+
+          <Button className="mt-2 ms-5" variant="primary" onClick={() => fetchDate()}>
             {loading ? <Box sx={{ display: "flex" }}>
               <CircularProgress color="secondary"/>
             </Box> : "LOAD DATA"}
@@ -157,7 +185,7 @@ const NoLogs = () => {
             
           </Button>
           <Button
-            className="ms-3"
+            className="ms-3 mt-2"
             variant="success"
             onClick={() => CreateExcelFile()}
           >
@@ -167,7 +195,7 @@ const NoLogs = () => {
       </div>
 
       <Paper sx={{ width: "125%", overflow: "hidden" }} className="m-3">
-        <TableContainer sx={{ maxHeight: 1000 }}>
+        <TableContainer sx={{ maxHeight: '80vh' }}>
           <Table stickyHeader aria-label="sticky table" id="table_data">
             <TableHead>
               <TableRow>
@@ -191,9 +219,10 @@ const NoLogs = () => {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row._emplCode}
+                      key={row.empd_id}
                     >
                       {columns.map((column) => {
+                        
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
@@ -210,7 +239,7 @@ const NoLogs = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
+          rowsPerPageOptions={[100, 250, 500, 1000]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -223,4 +252,4 @@ const NoLogs = () => {
   );
 };
 
-export default NoLogs;
+export default MonthlyExtraction;

@@ -16,9 +16,11 @@ import SignIn from "./pages/Login/SignIn";
 import PageNotFound from "./pages/PageNotFound";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import SignOut from "./pages/SignOut";
+import MonthlyExtraction from "./pages/MonthlyExtraction/MonthlyExtraction";
 
 function App() {
   const base_url = process.env.PUBLIC_URL;
+  const getToken = sessionStorage.getItem("token"); ///test
   
   const [user, setUser] = useState({ token: false });
 
@@ -27,7 +29,7 @@ function App() {
       <Router basename={`${base_url}`}>
         <Grid container>
           {
-            (user.token) ?
+            (getToken) ?
             <Navbar />
             :
             <></>
@@ -45,6 +47,7 @@ function App() {
               <Route element={<NoLogs />} exact path='/noLogs' />
               <Route element={<MonthEndOT />} exact path='/monthEndOt'/>
               <Route element={<YearReport />} exact path='/yearReport' />
+              <Route element={<MonthlyExtraction />} exact path='/monthlyExtraction' />
               <Route element={<SignOut />} exact path='/signout' />
               <Route element={<PageNotFound />} exact path='/*' />
             </Route>

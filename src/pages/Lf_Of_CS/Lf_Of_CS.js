@@ -69,7 +69,13 @@ const Lf_Of_CS = () => {
     try {
       await fetch(
         api.url + `/api/Attendance/GetLateCSFile?sDate=${sDate}&eDate=${eDate}`,
-        { method: "GET" }
+        { 
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${sessionStorage.getItem("token")}`
+          }
+        }
       )
         .then((res) => res.json())
         .then((data) => {

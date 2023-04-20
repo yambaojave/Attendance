@@ -9,42 +9,37 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import  UserContext   from '../../utils/UserContext';
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { api } from "../imports";
 
 
 const theme = createTheme();
 
 const  SignIn = () => {
   const history = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
+  const getToken = localStorage.getItem("token"); ///test
 
-  
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    let username = data.get("username");
-    let password = data.get("password");
-
-    const account = [ 
-      {
-        username: 'IT',
-        password: 'jsphIT',
-        role: 'IT'
+  const auth = (user, pass) => {
+    //return accounts.findIndex(account => account.username === user && account.password === pass) !== -1
+    let payload = {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
       },
-    ];
-
-    if (username === '' && password === ''){
-      return Swal.fire({
-        icon: 'error',
-        title: 'Please enter your username and password!',
-        showConfirmButton: false,
-        timer: 1000
-      });
+      body: JSON.stringify({
+        'Username' : user,
+        "Password" : pass
+      })
     }
-    if (username === account[0].username && password === account[0].password) {
-      if(user.token === false){
+
+    fetch(api.url + '/api/login', payload)
+    .then((response) => response.json())
+    .then((response) => {
+      //console.log(response);
+      if (response.result === 'authenticated') {
+        sessionStorage.setItem('token', 'Bearer ' + response.token);
         setUser({token: true});
         history("/PerfectAttendance");
         return Swal.fire({
@@ -54,7 +49,7 @@ const  SignIn = () => {
           timer: 1000
         });
       }
-      else {
+      else if (response.result === 'User not Found') {
         return Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -63,21 +58,33 @@ const  SignIn = () => {
           timer: 1000
         });
       }
-      
+    })
+  }
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    let username = data.get("username");
+    let password = data.get("password");
 
-    } else {
+
+    if (username === '' && password === ''){
       return Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: 'Wrong username or password',
+        title: 'Please enter your username and password!',
         showConfirmButton: false,
         timer: 1000
       });
     }
-  };
+    else
+      auth(username, password);
+
+    };
 
   return (
     <ThemeProvider theme={theme}>
+      {
+      getToken ? <Outlet /> : 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -130,6 +137,7 @@ const  SignIn = () => {
           </Box>
         </Box>
       </Container>
+      }
     </ThemeProvider>
   );
 }

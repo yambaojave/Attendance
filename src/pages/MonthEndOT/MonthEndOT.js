@@ -4,6 +4,11 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, format, DateRange, addDays, CircularProgress, Box, api, Swal} from "../imports";
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 const columns = [
   { id: "_DFrom", label: "Date From", minWidth: 150 },
   { id: "_DTo", label: "Date To", minWidth: 150 },
@@ -33,6 +38,14 @@ const MonthEndOT = () => {
       key: "selection",
     },
   ]);
+
+  const [db, setDb] = React.useState('');
+
+  const handleChange = (event) => {
+    setDb(event.target.value);
+  };
+
+
   const [open, setOpen] = useState(false);
   const refOne = useRef(null);
 
@@ -69,11 +82,28 @@ const MonthEndOT = () => {
     let sDate = format(range[0].startDate, "yyyy-MM-dd");
     let eDate = format(range[0].endDate, "yyyy-MM-dd");
     //console.log(sDate, eDate);
+    //console.log(db); 
+
+    if(db === ''){
+      return Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please select a Table type!',
+      });
+    }
+
     setLoading(true)
+    console.log(db);
     try {
       await fetch(
-        api.url + `/api/Attendance/GetMonthEndOT?sDate=${sDate}&eDate=${eDate}`,
-        { method: "GET" }
+        api.url + `/api/Attendance/GetMonthEndOT?sDate=${sDate}&eDate=${eDate}&db=${db}`,
+        { 
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${sessionStorage.getItem("token")}`
+          },
+        }
       )
         .then((res) => res.json())
         .then((data) => {
@@ -137,7 +167,23 @@ const MonthEndOT = () => {
           </div>
         </div>
         <div className="col-8 mt-3">
-          <Button variant="primary" onClick={() => fetchDate()}>
+
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <InputLabel>Select Table</InputLabel>
+          <Select
+            labelId="selectTable"
+            id="dbSelect"
+            value={db}
+            label="Select Table"
+            onChange={handleChange}
+          >
+            <MenuItem value={'JSPH'}>JSPH</MenuItem>
+            <MenuItem value={'CONTRACT'}>CONTRACT</MenuItem>
+
+          </Select>
+        </FormControl>
+
+          <Button className="mt-2 ms-5" variant="primary" onClick={() => fetchDate()}>
             {loading ? <Box sx={{ display: "flex" }}>
               <CircularProgress color="secondary"/>
             </Box> : "LOAD DATA"}
@@ -146,7 +192,7 @@ const MonthEndOT = () => {
             
           </Button>
           <Button
-            className="ms-3"
+            className="ms-3 mt-2"
             variant="success"
             onClick={() => CreateExcelFile()}
           >
@@ -180,7 +226,7 @@ const MonthEndOT = () => {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row._emplCode}
+                      key={row._empcode}
                     >
                       {columns.map((column) => {
                         const value = row[column.id];
