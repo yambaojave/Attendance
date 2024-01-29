@@ -17,6 +17,10 @@ import PageNotFound from "./pages/PageNotFound";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import SignOut from "./pages/SignOut";
 import MonthlyExtraction from "./pages/MonthlyExtraction/MonthlyExtraction";
+import ErrorTimesheet from "./pages/ErrorTimesheet/ErrorTimesheet";
+import Undertime from "./pages/Undertime/Undertime";
+import LateTimesheet from "./pages/LateTimesheet/LateTimesheet";
+import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 
 function App() {
   const base_url = process.env.PUBLIC_URL;
@@ -48,6 +52,10 @@ function App() {
               <Route element={<MonthEndOT />} exact path='/monthEndOt'/>
               <Route element={<YearReport />} exact path='/yearReport' />
               <Route element={<MonthlyExtraction />} exact path='/monthlyExtraction' />
+              <Route element={<ErrorTimesheet />} exact path='/ErrorTimesheet' />
+              <Route element={<Undertime />} exact path='/underTimesheet' />
+              <Route element={<LateTimesheet />} exact path='/lateTimesheet' />
+              <Route element={<WeeklySchedule />} exact path='/WeeklySchedule' />
               <Route element={<SignOut />} exact path='/signout' />
               <Route element={<PageNotFound />} exact path='/*' />
             </Route>
